@@ -326,7 +326,7 @@ dialog::backdrop{background:rgba(10,8,8,.92);backdrop-filter:blur(6px)}
 <!--MAGIA-LIQ-->
 <section class="block" id="liquidacion">
 <div class="wrap">
-<div class="head rv"><div><span class="kick">Liquidación por temporada</span><h2 style="margin-top:14px">Últimas <em class="gold">oportunidades</em></h2><p>Prendas de temporadas anteriores a precio de liquidación. Escríbenos y te pasamos el precio especial y las tallas que quedan.</p></div></div>
+<div class="head rv"><div><span class="kick">Precios rebajados · hasta agotar stock</span><h2 style="margin-top:14px"><em class="gold">LIQUIDACIÓN</em></h2><p>Prendas de temporadas anteriores a precio de liquidación. Escríbenos y te pasamos el precio especial y las tallas que quedan.</p></div></div>
 <div class="grid" id="liqGrid"></div>
 </div>
 </section>
@@ -413,7 +413,7 @@ ${p.variants.length>1?`<div class="sizes" role="group" aria-label="Talla">${p.va
 $('#grid').innerHTML=DATA.map(card).join('');
 $('#chips').innerHTML=CFG.groups.map(([g,l])=>`<button class="chip" data-f="${g}" aria-pressed="${g==='todo'}">${l}</button>`).join('');
 function filter(g){$$('.chip').forEach(c=>c.setAttribute('aria-pressed',c.dataset.f===g));let i=0;
-$$('.card').forEach(c=>{const on=g==='todo'||c.dataset.g===g;c.classList.toggle('hide',!on);c.classList.remove('enter','rv');if(on){void c.offsetWidth;c.style.animationDelay=(i++%8)*50+'ms';c.classList.add('enter')}})}
+$$('#grid .card').forEach(c=>{const on=g==='todo'||c.dataset.g===g;c.classList.toggle('hide',!on);c.classList.remove('enter','rv');if(on){void c.offsetWidth;c.style.animationDelay=(i++%8)*50+'ms';c.classList.add('enter')}})}
 $('#chips').addEventListener('click',e=>{const b=e.target.closest('[data-f]');if(b)filter(b.dataset.f)});
 $('#grid').addEventListener('click',e=>{const c=e.target.closest('.card');if(!c)return;const p=byId[c.dataset.s];
 const sz=e.target.closest('[data-v]');if(sz){vsel[p.slug]=+sz.dataset.v;const n=document.createElement('div');n.innerHTML=card(p);c.replaceWith(n.firstElementChild);return}
@@ -470,13 +470,13 @@ hero.addEventListener('pointerleave',()=>col.querySelectorAll('figure').forEach(
 }
 /*MAGIA-LIQ*/
 (()=>{const LIQ=(CFG.liq||["liquidacion", "vestido-2pzs", "vestido-tul", "vestidos", "varon", "nino", "ultimas-piezas"]).filter(s=>byId[s]);window.LIQ_SLUGS=LIQ;if(!LIQ.length){const s=document.getElementById('liquidacion');if(s)s.remove();return}LIQ.forEach(s=>{const p=byId[s];if(p&&!/Oferta/.test(p.badge))p.badge='Liquidación'});
-$('#grid').innerHTML=DATA.map(card).join('');
+$('#grid').innerHTML=DATA.filter(p=>!LIQ.includes(p.slug)).map(card).join('');
 $('#liqGrid').innerHTML=LIQ.filter(s=>byId[s]).map(s=>card(byId[s])).join('');
 $$('.badge').forEach(b=>{if(/Liquidación/.test(b.textContent))b.classList.add('hot')});
 $('#liqGrid').addEventListener('click',e=>{const c=e.target.closest('.card');if(!c)return;const p=byId[c.dataset.s];
   const sz=e.target.closest('[data-v]');if(sz){vsel[p.slug]=+sz.dataset.v;const n=document.createElement('div');n.innerHTML=card(p);c.replaceWith(n.firstElementChild);return}
   if(e.target.closest('[data-open]'))openLb(p,vsel[p.slug]||0,0)});
-const nav=document.querySelector('.links');if(nav)nav.insertAdjacentHTML('beforeend','<a href="#liquidacion" style="color:var(--gold)">Liquidación</a>');
+const nav=document.querySelector('.links');if(nav)nav.insertAdjacentHTML('beforeend','<a href="#liquidacion" style="color:var(--gold);font-weight:700">LIQUIDACIÓN</a>');
 })();
 /*MAGIA-v1*/
 (()=>{const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -507,12 +507,12 @@ document.querySelectorAll('.btn-p,.cta .btn').forEach(b=>{b.addEventListener('po
 /*MAGIA-ARMARIO*/
 (()=>{const rack=$('#rack'),fila=$('#hangers');if(!rack)return;
 const LIQS=window.LIQ_SLUGS||[],PR={"deportivo-s": "img/deportivo-s/prenda.webp", "blazer-corto": "img/blazer-corto/prenda.webp", "blazer-largo": "img/blazer-largo/prenda.webp", "camisas": "img/camisas/prenda.webp", "conjunto-falda": "img/conjunto-falda/prenda.webp", "deportivo-l": "img/deportivo-l/prenda.webp", "deportivo-m": "img/deportivo-m/prenda.webp", "jardinero": "img/jardinero/prenda.webp", "lanilla-2pzs": "img/lanilla-2pzs/prenda.webp", "liquidacion": "img/liquidacion/prenda.webp", "nina": "img/nina/prenda.webp", "nino": "img/nino/prenda.webp", "ultimas-piezas": "img/ultimas-piezas/prenda.webp", "vestido-2pzs": "img/vestido-2pzs/prenda.webp", "vestido-tul": "img/vestido-tul/prenda.webp", "vestidos": "img/vestidos/prenda.webp"};   /* prendas recortadas (cuelgan sin foto ni modelo) */
-const pest=[...CFG.groups.filter(g=>g[0]!=='todo'&&g[0]!=='ofertas'),...(LIQS.length?[['liq','Liquidación']]:[])];
+const pest=[...CFG.groups.filter(g=>g[0]!=='todo'&&g[0]!=='ofertas'),...(LIQS.length?[['liq','LIQUIDACIÓN']]:[])];
 const gancho='<svg viewBox="0 0 120 66"><path d="M60 6c-6 0-10 4-8.5 9 1.3 4 8.5 3.5 8.5 10v6L10 58c-4 2-3 6 2 6h96c5 0 6-4 2-6L60 31" fill="none" stroke="#b9892a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 let estado=[],x=0,vx=0,min=0,arr=null;
-function pintar(g){const ps=g==='liq'?LIQS.map(s=>byId[s]).filter(Boolean):DATA.filter(p=>p.group===g);
+function pintar(g){const ps=g==='liq'?LIQS.map(s=>byId[s]).filter(Boolean):DATA.filter(p=>p.group===g&&!LIQS.includes(p.slug)&&(!p.base||p.principal));
   const items=ps.flatMap(p=>p.variants.map((v,vi)=>({p,v,vi})));   /* cada talla cuelga por separado */
-  fila.innerHTML=items.map(({p,v,vi},i)=>{const im=v.imgs[0],corte=PR[p.slug+'-'+(v.label||'').toLowerCase()]||(vi?null:PR[p.slug]);
+  fila.innerHTML=items.map(({p,v,vi},i)=>{const im=v.imgs[0],corte=PR[(p.base||p.slug)+'-'+(v.label||'').toLowerCase()]||(vi?null:PR[p.base||p.slug]);
    return `<button class="hg ${g==='liq'?'liq':''}" data-s="${p.slug}" data-v="${vi}" style="--d:${i}">${gancho}<span class="prenda${corte?' corte':''}"><img src="${corte||im[3]}" alt="${esc(p.name)}" loading="lazy"></span><span class="etq"><b>${esc(p.name)}${v.label?' · '+esc(v.label):''}</b><i>${g==='liq'?'Liquidación':esc(p.price)}</i></span></button>`}).join('');
   estado=[...fila.children].map(el=>({el,a:0,w:0}));x=0;vx=0;medir();
   $$('#rackTabs .chip').forEach(c=>c.setAttribute('aria-pressed',c.dataset.r===g))}
